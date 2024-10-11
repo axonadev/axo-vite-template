@@ -11,25 +11,6 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  --primaryColor: rgb(120, 69, 172);
-  --onPrimaryColor: rgb(255, 255, 255);
-  --primaryContainerColor: rgb(240, 219, 255);
-  --onPrimaryContainerColor: rgb(44, 0, 81);
-  --secondaryColor: rgb(102, 90, 111);
-  --onSecondaryColor: rgb(255, 255, 255);
-  --secondaryContainerColor: rgb(237, 221, 246);
-  --onSecondaryContainerColor: rgb(33, 24, 42);
-  --tertiaryColor: rgb(128, 81, 88);
-  --onTertiaryColor: rgb(255, 255, 255);
-  --tertiaryContainerColor: rgb(255, 217, 221);
-  --onTertiaryContainerColor: rgb(50, 16, 23);
-  --errorColor: rgb(186, 26, 26);
-  --onErrorColor: rgb(255, 255, 255);
-  --errorContainerColor: rgb(255, 218, 214);
-  --onErrorContainerColor: rgb(65, 0, 2);
-  --backgroundColor: rgb(255, 251, 255);
-  --onBackgroundColor: rgb(29, 27, 30);
 }
 
 a {

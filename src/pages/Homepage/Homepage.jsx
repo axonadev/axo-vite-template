@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button/Button";
-import { Button as MtButton } from "@mantine/core";
 
 const Homepage = () => {
   const naviga = useNavigate();
@@ -22,13 +21,6 @@ const Homepage = () => {
         >
           clicca
         </Button>
-        <MtButton
-          onClick={() => {
-            naviga("/login");
-          }}
-        >
-          cla
-        </MtButton>
       </div>
     </>
   );
