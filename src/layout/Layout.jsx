@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import SideMenu from "../Components/SideMenu";
-import Fab from "../Components/Fab";
-import classes from "./Layout.module.css";
+import SideMenu from "../SideMenu";
+import Fab from "../Fab";
+import { Box } from "@mui/system";
 
 const Layout = ({ children }) => {
   const [screenWidth, setScreenWidth] = useState();
@@ -11,10 +11,21 @@ const Layout = ({ children }) => {
   }, [width]);
 
   return (
-    <div className={classes.layout_centrale}>
-      {screenWidth >= 600 ? <SideMenu /> : <Fab />}
-      {children}
-    </div>
+    <Box
+      sx={{
+        height: "calc(100% - 60px)",
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "row",
+      }}
+    >
+      <Box>Header</Box>
+      <Box>
+        {screenWidth >= 600 ? <SideMenu /> : <Fab />}
+        {children}
+      </Box>
+      <Box>Footer</Box>
+    </Box>
   );
 };
 

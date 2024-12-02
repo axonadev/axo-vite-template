@@ -1,7 +1,7 @@
 import useEnv from "../hooks/useEnv";
 
 const PostRegistration = () => {
-  const { REACT_APP_SERVERAPI } = useEnv();
+  const { SERVERAPI } = useEnv();
 
   const registraDispositivo = (
     endpoint,
@@ -11,6 +11,16 @@ const PostRegistration = () => {
     idSoggetto,
     Azienda
   ) => {
+    console.log(
+      "registraDispositivo",
+      endpoint,
+      P256DH,
+      Auth,
+      Token,
+      idSoggetto,
+      Azienda
+    );
+
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -38,9 +48,9 @@ const PostRegistration = () => {
       redirect: "follow",
     };
 
-    fetch(REACT_APP_SERVERAPI + "api/axo_subscription", requestOptions)
+    fetch(SERVERAPI + "/api/axo_subscription", requestOptions)
       .then((response) => response.text())
-      .then((result) => console.log(result))
+      .then((result) => {})
       .catch((error) => console.error(error));
   };
 

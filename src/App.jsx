@@ -8,12 +8,23 @@ import InvisibleRoutesIfAuth from "./routes/InvisibleRoutesIfAuth.jsx";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 //Pages
-import LoginPage from "./pages/auth/Login/Login.jsx";
-import Homepage from "./pages/Homepage/Homepage.jsx";
-import Dashboard from "./pages/protected/Dashboard/Dashboard.jsx";
+import LoginPage from "./pages/auth/Login.jsx";
+import Homepage from "./pages/Homepage.jsx";
+import Dashboard from "./pages/protected/Dashboard.jsx";
+import useEnv from "./hooks/useEnv.js";
+import ScrollToTop from "./components/ScrollToTop.jsx";
+
+import PostRegistration from "./utility/PostRegistration";
+
+const VAPID_PUBLIC_KEY_TEST =
+  "BPc714ElxdcFcn1JI_hSg2uwbkNk1CYn0UwTmwfmOmHYR8vK2ppwxPK2-nqTxk_sxt8KgIdVyYlXytvGyq1DvUo";
+const VAPID_PUBLIC_KEY_PROD =
+  "BPc714ElxdcFcn1JI_hSg2uwbkNk1CYn0UwTmwfmOmHYR8vK2ppwxPK2-nqTxk_sxt8KgIdVyYlXytvGyq1DvUo";
 
 const VAPID_PUBLIC_KEY =
-  "BPc714ElxdcFcn1JI_hSg2uwbkNk1CYn0UwTmwfmOmHYR8vK2ppwxPK2-nqTxk_sxt8KgIdVyYlXytvGyq1DvUo";
+  document.location.hostname.indexOf("eventfy.it") > -1
+    ? VAPID_PUBLIC_KEY_PROD
+    : VAPID_PUBLIC_KEY_TEST;
 
 const urlBase64ToUint8Array = (base64String) => {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -23,18 +34,9 @@ const urlBase64ToUint8Array = (base64String) => {
 };
 
 function App() {
-  /* const { registraDispositivo } = PostRegistration();
+  const Token = localStorage.getItem("axo_token");
+  const { AZIENDA } = useEnv();
 
-  const messaggio = () => {
-    const endpoint = localStorage.getItem("axo_endpoint");
-    const P256DH = localStorage.getItem("axo_P256DH");
-    const Auth = localStorage.getItem("axo_Auth");
-    const Token =
-      "YSbfWMuh9vsg91_s_t5vVAAx2kNmBYjc55Cy13wngUIPJLVOOm_p_daMGrmMFOVwo_s_swxWAHfwSDV_p_A9neujHbZ2WNeZCWjY6531Yo9O_s_CLRFesUQCmBt9LDcotCOAFy5cYA";
-    const idSoggetto = 1;
-    const Azienda = "06087680960";
-    registraDispositivo(endpoint, P256DH, Auth, Token, idSoggetto, Azienda);
-  }; */
   useEffect(() => {
     if ("serviceWorker" in navigator && "PushManager" in window) {
       navigator.serviceWorker
@@ -69,8 +71,22 @@ function App() {
     }
   }, []);
 
+  const { registraDispositivo } = PostRegistration();
+
+  useEffect(() => {
+    registraDispositivo(
+      localStorage.getItem("axo_endpoint"),
+      localStorage.getItem("axo_P256DH"),
+      localStorage.getItem("axo_Auth"),
+      Token,
+      26,
+      AZIENDA
+    );
+  }, []);
+
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path={"/"} element={<Homepage />}></Route>
         <Route element={<InvisibleRoutesIfAuth />}>
