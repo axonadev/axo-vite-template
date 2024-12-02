@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 import useDevice from "../hooks/useDevice";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const Layout = ({ children }) => {
   const naviga = useNavigate();
@@ -57,7 +58,7 @@ const Layout = ({ children }) => {
         </Box>
       </Box>
 
-      <Box>Footer</Box>
+      <Footer />
     </>
   );
 };
