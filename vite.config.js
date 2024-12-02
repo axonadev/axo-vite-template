@@ -3,44 +3,48 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
-export default defineConfig({
-  plugins: [
-    react(),
-    VitePWA({
-      registerType: "autoUpdate",
-      injectRegister: false,
+export default ({ mode }) => {
+  // Load app-level env vars to node-level env vars.
 
-      srcDir: "src",
-      filename: "service-worker.js",
-      strategies: "injectManifest",
+  return defineConfig({
+    plugins: [
+      react(),
+      VitePWA({
+        registerType: "autoUpdate",
+        injectRegister: false,
 
-      pwaAssets: {
-        disabled: false,
-        config: true,
-      },
+        srcDir: "src",
+        filename: "service-worker.js",
+        strategies: "injectManifest",
 
-      manifest: {
-        name: "testPwa",
-        short_name: "testPwa",
-        description: "test pwa",
-        theme_color: "#ffffff",
-      },
-      injectManifest: {
-        injectionPoint: undefined,
-      },
+        pwaAssets: {
+          disabled: false,
+          config: true,
+        },
 
-      workbox: {
-        globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
-        cleanupOutdatedCaches: true,
-        clientsClaim: true,
-      },
+        manifest: {
+          name: "testPwa",
+          short_name: "testPwa",
+          description: "test pwa",
+          theme_color: "#ffffff",
+        },
+        injectManifest: {
+          injectionPoint: undefined,
+        },
 
-      devOptions: {
-        enabled: false,
-        navigateFallback: "index.html",
-        suppressWarnings: true,
-        type: "module",
-      },
-    }),
-  ],
-});
+        workbox: {
+          globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+        },
+
+        devOptions: {
+          enabled: false,
+          navigateFallback: "index.html",
+          suppressWarnings: true,
+          type: "module",
+        },
+      }),
+    ],
+  });
+};

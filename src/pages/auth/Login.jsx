@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../store/storeLogin";
 import { useDispatch } from "react-redux";
 import { Box, Button, TextField } from "@mui/material";
+
 import useEnv from "../../hooks/useEnv";
 
 function LoginForm() {
@@ -90,7 +91,7 @@ function LoginForm() {
         onClick={handleSubmit}
         sx={{ fontSize: "0.7rem" }}
       >
-        Login {import.meta.env.VITE_TEST} asd
+        Login
       </Button>
 
       <Box
