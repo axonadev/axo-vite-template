@@ -17,7 +17,7 @@ const ProtectedRoutes = () => {
       setLoading(false);
     } else {
       const valToken = await LoginByToken(sessionToken);
-      localStorage.setItem("axo_token", valToken);
+      localStorage.setItem("axo_token", valToken.token);
       setLoading(false);
     }
   };

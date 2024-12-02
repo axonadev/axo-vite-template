@@ -48,6 +48,7 @@ function LoginForm() {
           setError(data?.Errore || "Login failed");
           setLoading(false); // Stop Loading
         } else {
+          localStorage.setItem("axo_token", data.Token); // Salva il token in locale
           dispatch(login(data)); // Invia i dati utente allo store
           navigate("/dashboard"); // Redirect alla dashboard
         }
@@ -69,6 +70,15 @@ function LoginForm() {
         justifyContent: "center",
       }}
     >
+      {" "}
+      <TextField
+        label="Piva azienda"
+        placeholder="01234567890"
+        required
+        value={azienda}
+        onChange={(e) => setAzienda(e.currentTarget.value)}
+        margin="normal"
+      />
       <TextField
         label="User/Mail"
         placeholder="user@mail.com"
@@ -93,7 +103,6 @@ function LoginForm() {
       >
         Login
       </Button>
-
       <Box
         sx={{
           display: "flex",

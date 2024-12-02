@@ -1,27 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@mui/material";
+import Layout from "../layout/Layout";
 
 const Homepage = () => {
+  const Token = localStorage.getItem("axo_token");
+
   const naviga = useNavigate();
   return (
     <>
-      <div>HOMEPAGE</div>
-      <div>
-        <button
-          onClick={() => {
-            naviga("/login");
-          }}
-        >
-          login
-        </button>
-        <Button
-          onClick={() => {
-            naviga("/login");
-          }}
-        >
-          clicca
-        </Button>
-      </div>
+      <Layout>
+        <div>HOMEPAGE</div>
+      </Layout>
     </>
   );
 };

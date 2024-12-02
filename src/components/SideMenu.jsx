@@ -1,8 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import HomeIcon from "@material-ui/icons/Home";
-import InfoIcon from "@material-ui/icons/Info";
-import ContactMailIcon from "@material-ui/icons/ContactMail";
+import HomeIcon from "@mui/icons-material/Home";
+import InfoIcon from "@mui/icons-material/Info";
+
+import ContactMailIcon from "@mui/icons-material/ContactMail";
 import { Box } from "@mui/system";
 
 const SideMenu = () => {
