@@ -90,7 +90,7 @@ function LoginForm() {
         onClick={handleSubmit}
         sx={{ fontSize: "0.7rem" }}
       >
-        Login
+        Login {import.meta.env.VITE_TEST} asd
       </Button>
 
       <Box

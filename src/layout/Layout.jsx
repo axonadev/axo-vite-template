@@ -20,6 +20,7 @@ const Layout = ({ children }) => {
       }}
     >
       <Box>Header</Box>
+
       <Box>
         {screenWidth >= 600 ? <SideMenu /> : <Fab />}
         {children}
