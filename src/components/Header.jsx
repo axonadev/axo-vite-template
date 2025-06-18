@@ -1,140 +1,199 @@
-import React, { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Box,
+  IconButton,
+  Avatar,
+  useTheme,
+  useMediaQuery,
+  Slide,
+  useScrollTrigger,
+  Container,
+} from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Dashboard as DashboardIcon,
+} from "@mui/icons-material";
 
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { trigger } from "../store/isMenuOpen";
 
 import UserMenu from "./UserMenu";
 import IconLogin from "./IconLogin";
 
-const Header = ({ loginVisible }) => {
-  const Token = localStorage.getItem("axo_token");
-  const naviga = useNavigate();
+// Componente per nascondere l'header durante lo scroll
+function HideOnScroll({ children }) {
+  const trigger = useScrollTrigger({
+    target: window,
+    threshold: 100,
+  });
 
+  return (
+    <Slide appear={false} direction="down" in={!trigger}>
+      {children}
+    </Slide>
+  );
+}
+
+const Header = ({ loginVisible = true }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // Selettori Redux
   const nomeSoggetto = useSelector((state) => state.auth.value.nomesoggetto);
-
   const cognomeSoggetto = useSelector(
     (state) => state.auth.value.cognomesoggetto
   );
-  const openMenu = useSelector((state) => state.isMenuOpen.value.open);
-
-  const goUser = () => {
-    dispatch(trigger());
-  };
-
+  // Stato locale per le iniziali
   const [iniziali, setIniziali] = useState("");
 
+  // Stato per UserMenu
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openUserMenu = Boolean(anchorEl);
+
+  // Calcola le iniziali quando cambiano nome/cognome
   useEffect(() => {
-    setIniziali(
-      nomeSoggetto?.charAt(0) + "." + cognomeSoggetto?.charAt(0) + "."
-    );
+    if (nomeSoggetto && cognomeSoggetto) {
+      const inizialiCalcolate = `${nomeSoggetto.charAt(
+        0
+      )}.${cognomeSoggetto.charAt(0)}.`;
+      setIniziali(inizialiCalcolate);
+    }
   }, [nomeSoggetto, cognomeSoggetto]);
+
+  // Funzioni di navigazione
+  const handleLogoClick = () => {
+    navigate("/dashboard");
+  };
+
+  // Gestione apertura/chiusura UserMenu
+  const handleUserMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleUserMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  // Memoizza il contenuto dell'avatar per evitare re-render
+  const avatarContent = useMemo(() => {
+    if (iniziali) {
+      return iniziali;
+    }
+    return nomeSoggetto ? nomeSoggetto.charAt(0) : "U";
+  }, [iniziali, nomeSoggetto]);
 
   return (
     <>
-      <Box id="header">
-        <Box
-          sx={{
-            position: "relative",
-            width: "100%",
-            minHeight: "100px",
-            display: "flex",
-            textAlign: "center",
-            justifyContent: "center",
-            paddingTop: "10px",
-            zIndex: "100",
-            backgroundColor: "primary.contrastText",
-            backgroundImage: "url('https://picsum.photos/1200/300')",
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              alignContent: "center",
-              verticalAlign: "middle",
-              height: "100%",
-            }}
-            onClick={() => {
-              naviga("/dashboard");
-            }}
-          >
-            <img
-              style={{ maxWidth: "300px" }}
-              src="/icon/logo.png"
-              loading="lazy"
-            ></img>
-          </Box>
+      {/* Header fisso - appare durante lo scroll */}
 
-          {loginVisible ? (
-            <IconLogin
-              onClick={goUser}
-              imgLogin={"https://placehold.co/40x40?text=" + iniziali}
-            >
-              <Typography
-                sx={{ fontSize: "0.8rem", fontWeight: "600" }}
-              ></Typography>
-            </IconLogin>
-          ) : null}
-        </Box>
-        <Box
-          sx={{
-            position: "fixed",
-            top: "0",
-            width: "100%",
-            display: "flex",
-            padding: "10px",
-            zIndex: "90",
-            justifyContent: "space-between",
-            backgroundColor: "primary.contrastText",
-            backgroundImage: "url('https://picsum.photos/1200/300')",
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            backgroundPosition: "center",
-            boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.75)",
-          }}
-        >
-          <Box
+      <AppBar
+        position="fixed"
+        elevation={4}
+        sx={{
+          top: 0,
+          backgroundColor: "primary.contrastText",
+          backgroundImage: "url('https://picsum.photos/1200/300')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          zIndex: theme.zIndex.appBar,
+        }}
+      >
+        <Container maxWidth="xl">
+          <Toolbar
+            variant="dense"
             sx={{
-              float: "left",
-              width: "calc(50% + 40px)",
-              display: "flex",
+              minHeight: 60,
               justifyContent: "space-between",
-              height: "50px",
-            }}
-            onClick={() => {
-              naviga("/dashboard");
+              py: 1,
             }}
           >
+            {/* Logo compatto */}
             <Box
-              sx={{ display: "flex", flexDirection: "column", width: "100%" }}
-            >
-              <img
-                src="/icon/logo.png"
-                loading="lazy"
-                style={{ maxWidth: "100px", maxHeight: "50px" }}
-              ></img>
-            </Box>
-            <Box
+              onClick={handleLogoClick}
               sx={{
-                position: "absolute",
-                top: "70px",
-                left: "0",
-                right: "0",
-                color: "primary.main",
-                backgroundColor: "primary.contrastText",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                transition: "transform 0.2s ease",
+                "&:hover": {
+                  transform: "scale(1.05)",
+                },
               }}
-            ></Box>
-          </Box>
-        </Box>
-      </Box>
-      {openMenu ? <UserMenu></UserMenu> : ""}
+            >
+              <Box
+                component="img"
+                src="/icon/logo.png"
+                alt="EventIMS Logo"
+                sx={{
+                  maxWidth: 100,
+                  maxHeight: 40,
+                  objectFit: "contain",
+                }}
+              />
+            </Box>
+
+            {/* Menu e utente compatti */}
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              {loginVisible && (
+                <>
+                  <IconButton
+                    onClick={() => navigate("/dashboard")}
+                    sx={{
+                      color: "primary.main",
+                      "&:hover": {
+                        backgroundColor: "rgba(25, 118, 210, 0.1)",
+                      },
+                    }}
+                    aria-label="Dashboard"
+                  >
+                    <DashboardIcon />
+                  </IconButton>
+
+                  <IconButton
+                    onClick={handleUserMenuOpen}
+                    sx={{
+                      p: 0,
+                      border: "1px solid",
+                      borderColor: "primary.main",
+                      "&:hover": {
+                        borderColor: "primary.dark",
+                      },
+                    }}
+                    aria-label="Menu utente"
+                  >
+                    <Avatar
+                      sx={{
+                        width: 32,
+                        height: 32,
+                        bgcolor: "primary.main",
+                        color: "primary.contrastText",
+                        fontSize: "0.75rem",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      {avatarContent}
+                    </Avatar>
+                  </IconButton>
+                  <UserMenu
+                    anchorEl={anchorEl}
+                    open={openUserMenu}
+                    onClose={handleUserMenuClose}
+                  />
+                </>
+              )}
+            </Box>
+          </Toolbar>
+        </Container>
+      </AppBar>
     </>
   );
 };
+
 export default Header;

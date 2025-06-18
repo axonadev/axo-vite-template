@@ -1,7 +1,5 @@
-import useEnv from "../hooks/useEnv";
-
 const PostRegistration = () => {
-  const { SERVERAPI } = useEnv();
+  const SERVERAPI = import.meta.env.VITE_SERVERAPI;
 
   const registraDispositivo = (
     endpoint,

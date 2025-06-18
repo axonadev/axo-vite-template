@@ -16,10 +16,10 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@emotion/react": "^11.13.3",
-    "@emotion/styled": "^11.13.0",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@mui/icons-material": "^6.1.2",
-    "@mui/material": "^6.1.2",
+    "@mui/material": "^6.4.12",
     "@mui/x-data-grid": "^7.21.0",
     "@reduxjs/toolkit": "^2.2.7",
     "@tinymce/tinymce-react": "^5.1.1",
@@ -52,7 +52,7 @@
     "eslint-plugin-storybook": "^0.11.1",
     "globals": "^15.9.0",
     "prop-types": "^15.8.1",
-    "react-styleguidist": "^13.1.4",
+    "react-styleguidist": "^4.6.3",
     "storybook": "^8.4.7",
     "vite": "^6.2.0",
     "vite-plugin-pwa": "^0.21.1",

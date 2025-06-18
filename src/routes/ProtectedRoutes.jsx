@@ -1,24 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { Outlet, Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import Loader from "../components/Loader";
-import { LoginByToken } from "../utility/CallLogin";
+import { loginByToken } from "../utility/CallLogin";
 
 const ProtectedRoutes = () => {
-  const user = useSelector((state) => state.auth.value.token);
-  const isGuest = useSelector((state) => state.auth.value.guest);
+  const [isGuest, setIsGuest] = useState(null); // <-- null = stato iniziale
+  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch(); // <-- dispatch non viene utilizzato in questo componente, ma potrebbe essere necessario in futuro
 
   const sessionToken = localStorage.getItem("axo_token");
-
-  const [loading, setLoading] = useState(true);
-
   const getLogin = async () => {
     if (!sessionToken) {
+      setIsGuest(true);
       setLoading(false);
     } else {
-      const valToken = await LoginByToken(sessionToken);
-      localStorage.setItem("axo_token", valToken.token);
-      setLoading(false);
+      try {
+        const valToken = await loginByToken(dispatch, sessionToken);
+
+        if (!valToken || !valToken.token) {
+          localStorage.removeItem("axo_token");
+          setIsGuest(true);
+        } else {
+          localStorage.setItem("axo_token", valToken.token);
+          setIsGuest(valToken.guest);
+        }
+      } catch (error) {
+        console.error("LoginByToken error:", error);
+        setIsGuest(true);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -26,7 +38,9 @@ const ProtectedRoutes = () => {
     getLogin();
   }, []);
 
-  return loading ? <Loader /> : !isGuest ? <Outlet /> : <Navigate to="/" />;
+  if (loading || isGuest === null) return <Loader />; // <-- blocca rendering prematuro
+
+  return isGuest ? <Navigate to="/" replace /> : <Outlet />;
 };
 
 export default ProtectedRoutes;

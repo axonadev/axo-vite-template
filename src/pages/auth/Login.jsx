@@ -5,10 +5,9 @@ import { login } from "../../store/storeLogin";
 import { useDispatch } from "react-redux";
 import { Box, Button, TextField } from "@mui/material";
 
-import useEnv from "../../hooks/useEnv";
-
 function LoginForm() {
-  const { SERVERAPI, AZIENDA } = useEnv();
+  const SERVERAPI = import.meta.env.VITE_SERVERAPI;
+  const AZIENDA = import.meta.env.AZIENDA;
 
   const [azienda, setAzienda] = useState(AZIENDA);
   const [user, setUser] = useState("");

@@ -1,16 +1,9 @@
-import { useNavigate } from "react-router-dom";
-import { Button } from "@mui/material";
-import Layout from "../layout/Layout";
+import LoginForm from "./auth/Login";
 
 const Homepage = () => {
-  const Token = localStorage.getItem("axo_token");
-
-  const naviga = useNavigate();
   return (
     <>
-      <Layout>
-        <div>HOMEPAGE</div>
-      </Layout>
+      <LoginForm />
     </>
   );
 };

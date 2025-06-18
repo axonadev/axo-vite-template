@@ -29,4 +29,5 @@ dev-dist
 .env.test.local
 .env.production.local
 .env
+.env.*
 *storybook.log

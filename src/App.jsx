@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import "./App.css";
 
 import ProtectedRoutes from "./routes/ProtectedRoutes.jsx";
@@ -6,25 +6,18 @@ import InvisibleRoutesIfAuth from "./routes/InvisibleRoutesIfAuth.jsx";
 
 //React router
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Suspense } from "react";
+import Loader from "./components/Loader.jsx";
 
 //Pages
-import LoginPage from "./pages/auth/Login.jsx";
 import Homepage from "./pages/Homepage.jsx";
-import Dashboard from "./pages/protected/Dashboard.jsx";
-import useEnv from "./hooks/useEnv.js";
+const Dashboard = React.lazy(() => import("./pages/protected/Dashboard.jsx"));
+
 import ScrollToTop from "./components/ScrollToTop.jsx";
 
 import PostRegistration from "./utility/PostRegistration";
 
-const VAPID_PUBLIC_KEY_TEST =
-  "BPc714ElxdcFcn1JI_hSg2uwbkNk1CYn0UwTmwfmOmHYR8vK2ppwxPK2-nqTxk_sxt8KgIdVyYlXytvGyq1DvUo";
-const VAPID_PUBLIC_KEY_PROD =
-  "BPc714ElxdcFcn1JI_hSg2uwbkNk1CYn0UwTmwfmOmHYR8vK2ppwxPK2-nqTxk_sxt8KgIdVyYlXytvGyq1DvUo";
-
-const VAPID_PUBLIC_KEY =
-  document.location.hostname.indexOf("eventfy.it") > -1
-    ? VAPID_PUBLIC_KEY_PROD
-    : VAPID_PUBLIC_KEY_TEST;
+const VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY;
 
 const urlBase64ToUint8Array = (base64String) => {
   const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
@@ -35,7 +28,7 @@ const urlBase64ToUint8Array = (base64String) => {
 
 function App() {
   const Token = localStorage.getItem("axo_token");
-  const { AZIENDA } = useEnv();
+  const AZIENDA = import.meta.env.VITE_AZIENDA;
 
   useEffect(() => {
     if ("serviceWorker" in navigator && "PushManager" in window) {
@@ -85,18 +78,20 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <ScrollToTop />
-      <Routes>
-        <Route path={"/"} element={<Homepage />}></Route>
-        <Route element={<InvisibleRoutesIfAuth />}>
-          <Route path={"/login"} element={<LoginPage />}></Route>
-        </Route>
-        <Route element={<ProtectedRoutes />}>
-          <Route element={<Dashboard />} path={"/dashboard"} />
-        </Route>
-      </Routes>
-    </Router>
+    <Suspense fallback={<Loader />}>
+      <Router>
+        <ScrollToTop />
+        <Routes>
+          <Route path="/" element={<Homepage />} />
+          <Route element={<InvisibleRoutesIfAuth />}>
+            <Route path="/login" element={<Homepage />} />
+          </Route>
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/dashboard" element={<Dashboard />} />
+          </Route>
+        </Routes>
+      </Router>
+    </Suspense>
   );
 }
 
